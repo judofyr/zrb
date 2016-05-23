@@ -36,7 +36,7 @@ module ZRB
       while pos < data.size
         match = data.match(TOKEN, pos)
         raise SyntaxError, "#{filename}:#{lineno}: parse error" unless match
-        all, text, expr, statement_space, statement, _ = *match
+        all, text, expr, _, statement, statement_space = *match
         pos += all.size
 
         yield :text, text unless text.empty?
@@ -59,8 +59,6 @@ module ZRB
           pos = closing_pos + 1
         end
 
-        yield :newline if statement_space
-
         if statement
           case statement[0]
           when ?=
@@ -73,6 +71,8 @@ module ZRB
             yield :statement, statement
           end
         end
+
+        yield :newline if statement_space
       end 
     end
 

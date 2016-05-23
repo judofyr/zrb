@@ -67,6 +67,33 @@ world
     assert_equal "Hello second!", @res2.strip
   end
 
+  def test_line_numbers
+    t = Template.new { <<-EOF }
+    <? raise if a == 1 ?>
+    hello
+    <? raise if a == 3 ?>
+    <? if a == 6 ?>
+      bar
+      <? raise ?>
+    <? elsif a == 8 ?>
+      <? raise ?>
+      wat
+    <? end ?>
+    hello
+    world
+    <? raise ?>
+    EOF
+
+    [1, 3, 6, 8, 13].each do |lineno|
+      @buffer = Buffer.new
+      exc = assert_raises do
+        t.render(self, :a => lineno)
+      end
+      actual = exc.backtrace[0][/:(\d+)/, 1].to_i
+      assert_equal lineno, actual
+    end
+  end
+
   def test_expr
     @buffer = Buffer.new
     t = Template.new { 'Hello #{1 + 1}' }
