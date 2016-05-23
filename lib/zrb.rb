@@ -88,7 +88,7 @@ module ZRB
 
     def ensure_string
       if @state != :string
-        source << 'buffer.append_string("'
+        source << 'buffer << "'
         @state = :string
       end
     end
@@ -106,7 +106,7 @@ module ZRB
     end
 
     def append_ruby(ruby)
-      source << '");' if @state == :string
+      source << '";' if @state == :string
       source << ruby
       @state = :ruby
     end
@@ -129,7 +129,7 @@ module ZRB
         when :expression
           append_expr(value)
         when :block_expression
-          append_ruby("buffer.append=#{value};")
+          append_ruby("buffer.safe_append=#{value};")
         when :statement
           append_ruby("#{value};")
         when :newline
@@ -164,12 +164,8 @@ module ZRB
       other.to_s
     end
 
-    def append=(other)
+    def safe_append=(other)
       self << escape(other)
-    end
-
-    def append_string(other)
-      self << other
     end
 
     def capture(blk)
