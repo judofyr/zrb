@@ -134,6 +134,10 @@ module ZRB
           append_ruby("#{value};")
         when :newline
           append_newline
+        when :comment
+          # no nothing
+        else
+          raise "internal error: unknown parsing type"
         end
       end
 
