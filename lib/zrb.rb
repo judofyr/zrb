@@ -168,9 +168,9 @@ module ZRB
       self << escape(other)
     end
 
-    def capture(blk)
+    def capture(blk, *args)
       start = self.size
-      blk.call
+      blk.call(*args)
     ensure
       return self.slice!(start..-1)
     end

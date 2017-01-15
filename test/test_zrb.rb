@@ -101,18 +101,18 @@ world
   end
 
   def form_for(&blk)
-    "<form>#{@form_buffer.capture(blk).strip}</form>"
+    "<form>#{@form_buffer.capture(blk, "/awesome").strip}</form>"
   end
 
   def test_block_expr
     @form_buffer = @buffer = Buffer.new
-    t = Template.new { <<-EOF }
-    <?= form_for do ?>
-    Hello world!
+    t = Template.new { <<-'EOF' }
+    <?= form_for do |path| ?>
+    Hello #{path}!
     <? end ?>
     EOF
 
-    assert_equal "<form>Hello world!</form>", t.render(self).strip
+    assert_equal "<form>Hello /awesome!</form>", t.render(self).strip
   end
 
   def test_html
