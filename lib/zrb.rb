@@ -170,9 +170,12 @@ module ZRB
 
     def capture(blk, *args)
       start = self.size
-      blk.call(*args)
-    ensure
-      return self.slice!(start..-1)
+      begin
+        blk.call(*args)
+      ensure
+        result = self.slice!(start..-1)
+      end
+      result
     end
   end
 

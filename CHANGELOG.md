@@ -1,3 +1,7 @@
+## master
+
+* Don't swallow exceptions in capture
+
 ## 1.1.0 (2017-01-15)
 
 * Fix line numbering bug

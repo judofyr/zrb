@@ -115,6 +115,20 @@ world
     assert_equal "<form>Hello /awesome!</form>", t.render(self).strip
   end
 
+  def test_block_expr_error
+    @form_buffer = @buffer = Buffer.new
+    t = Template.new { <<-'EOF' }
+    <?= form_for do |path| ?>
+    Hello #{path}!
+    <? raise ?>
+    <? end ?>
+    EOF
+
+    assert_raises do
+      t.render(self)
+    end
+  end
+
   def test_html
     @buffer = HTMLBuffer.new
     t = Template.new { 'Hello #{"&"}' }
