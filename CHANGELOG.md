@@ -1,4 +1,4 @@
-## master
+## 1.1.1 (2017-01-15)
 
 * Don't swallow exceptions in capture
 
